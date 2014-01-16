@@ -8,7 +8,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use clone::Clone;
+use cmp::Ord;
+use num::One;
 use option::{Option, Some, None};
+use ops::Add;
 
 pub trait Iterator<A> {
     fn next(&mut self) -> Option<A>;
@@ -54,8 +58,27 @@ pub trait DoubleEndedIterator<A>: Iterator<A> {
 }
 
 #[deriving(Clone)]
+pub struct Range<T> {
+    priv low: T,
+    priv high: T,
+    priv step: T
+}
+
+#[deriving(Clone)]
 pub struct Invert<T> {
     iter: T
+}
+
+impl<A: Add<A, A> + Ord + Clone> Iterator<A> for Range<A> {
+    fn next(&mut self) -> Option<A> {
+        if self.low < self.high {
+            let val = self.low.clone();
+            self.low = self.low + self.step;
+            Some(val)
+        } else {
+            None
+        }
+    }
 }
 
 impl<A, T: DoubleEndedIterator<A>> Iterator<A> for Invert<T> {
@@ -70,3 +93,32 @@ impl<A, T: DoubleEndedIterator<A>> DoubleEndedIterator<A> for Invert<T> {
     #[inline(always)]
     fn next_back(&mut self) -> Option<A> { self.iter.next() }
 }
+
+#[inline(always)]
+pub fn range<A: Add<A, A> + Ord + Clone + One>(start: A, stop: A) -> Range<A> {
+    range_step(start, stop, One::one())
+}
+
+#[inline(always)]
+pub fn range_inclusive<A: Add<A, A> + Ord + Clone + One>(start: A, stop: A) -> Range<A> {
+    range_step_inclusive(start, stop, One::one())
+}
+
+#[inline(always)]
+pub fn range_step<A: Add<A, A> + Ord + Clone>(start: A, stop: A, step: A) -> Range<A> {
+    Range {
+        low: start,
+        high: stop,
+        step: step
+    }
+}
+
+#[inline(always)]
+pub fn range_step_inclusive<A: Add<A, A> + Ord + Clone + One>(start: A, stop: A, step: A) -> Range<A> {
+    Range {
+        low: start,
+        high: stop + One::one(),
+        step: step
+    }
+}
+
