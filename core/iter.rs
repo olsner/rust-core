@@ -10,7 +10,7 @@
 
 use clone::Clone;
 use cmp::Ord;
-use num::One;
+use num::{One, ToPrimitive};
 use option::{Option, Some, None};
 use ops::Add;
 
@@ -33,6 +33,20 @@ pub trait Iterator<A> {
             }
         }
         accum
+    }
+
+    #[inline]
+    fn advance(&mut self, func: |A| -> bool) -> bool {
+        loop {
+            match self.next() {
+                Some(elem) => {
+                    if !func(elem) {
+                        return false;
+                    }
+                }
+                None => { return true; }
+            }
+        }
     }
 
     #[inline]
@@ -69,7 +83,7 @@ pub struct Invert<T> {
     priv iter: T
 }
 
-impl<A: Add<A, A> + Ord + Clone> Iterator<A> for Range<A> {
+impl<A: Add<A, A> + Ord + Clone + ToPrimitive> Iterator<A> for Range<A> {
     fn next(&mut self) -> Option<A> {
         if self.low < self.high {
             let val = self.low.clone();
@@ -77,6 +91,17 @@ impl<A: Add<A, A> + Ord + Clone> Iterator<A> for Range<A> {
             Some(val)
         } else {
             None
+        }
+    }
+
+    fn size_hint(&self) -> (uint, Option<uint>) {
+        if self.high >= self.low {
+            match self.low.to_uint() {
+                Some(low) => (low, self.high.to_uint()),
+                None => (0, None)
+            }
+        } else {
+            (0, None)
         }
     }
 }
