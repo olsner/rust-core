@@ -12,7 +12,7 @@ use clone::Clone;
 use cmp::Ord;
 use num::{One, ToPrimitive};
 use option::{Option, Some, None};
-use ops::Add;
+use ops::{Add, Sub};
 
 pub trait Iterator<A> {
     fn next(&mut self) -> Option<A>;
@@ -75,6 +75,7 @@ pub trait DoubleEndedIterator<A>: Iterator<A> {
 pub struct Range<T> {
     priv low: T,
     priv high: T,
+    priv state: T,
     priv step: T
 }
 
@@ -85,9 +86,9 @@ pub struct Invert<T> {
 
 impl<A: Add<A, A> + Ord + Clone + ToPrimitive> Iterator<A> for Range<A> {
     fn next(&mut self) -> Option<A> {
-        if self.low < self.high {
-            let val = self.low.clone();
-            self.low = self.low + self.step;
+        if self.state < self.high {
+            let val = self.state.clone();
+            self.state = self.state + self.step;
             Some(val)
         } else {
             None
@@ -102,6 +103,18 @@ impl<A: Add<A, A> + Ord + Clone + ToPrimitive> Iterator<A> for Range<A> {
             }
         } else {
             (0, None)
+        }
+    }
+}
+
+impl<A: Add<A, A> + Sub<A, A> + Ord + Clone + ToPrimitive> DoubleEndedIterator<A> for Range<A> {
+    fn next_back(&mut self) -> Option<A> {
+        if self.state >= self.low {
+            let val = self.state.clone();
+            self.state = self.state - self.step;
+            Some(val)
+        } else {
+            None
         }
     }
 }
@@ -132,8 +145,9 @@ pub fn range_inclusive<A: Add<A, A> + Ord + Clone + One>(start: A, stop: A) -> R
 #[inline(always)]
 pub fn range_step<A: Add<A, A> + Ord + Clone>(start: A, stop: A, step: A) -> Range<A> {
     Range {
-        low: start,
+        low: start.clone(),
         high: stop,
+        state: start,
         step: step
     }
 }
@@ -141,8 +155,9 @@ pub fn range_step<A: Add<A, A> + Ord + Clone>(start: A, stop: A, step: A) -> Ran
 #[inline(always)]
 pub fn range_step_inclusive<A: Add<A, A> + Ord + Clone + One>(start: A, stop: A, step: A) -> Range<A> {
     Range {
-        low: start,
+        low: start.clone(),
         high: stop + One::one(),
+        state: start,
         step: step
     }
 }
