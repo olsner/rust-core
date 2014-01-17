@@ -8,21 +8,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-macro_rules! define_int_one(
+macro_rules! one_impl(
     ($tyname:ty) => (
         impl One for $tyname {
             fn one() -> $tyname {
-                1
-            }
-        }
-    )
-)
-
-macro_rules! define_float_one(
-    ($tyname:ty) => (
-        impl One for $tyname {
-            fn one() -> $tyname {
-                1.0
+                1 as $tyname
             }
         }
     )
@@ -32,16 +22,16 @@ pub trait One {
     fn one() -> Self;
 }
 
-define_int_one!(u8)
-define_int_one!(u16)
-define_int_one!(u32)
-define_int_one!(u64)
-define_int_one!(uint)
-define_int_one!(i8)
-define_int_one!(i16)
-define_int_one!(i32)
-define_int_one!(i64)
-define_int_one!(int)
-define_float_one!(f32)
-define_float_one!(f64)
+one_impl!(u8)
+one_impl!(u16)
+one_impl!(u32)
+one_impl!(u64)
+one_impl!(uint)
+one_impl!(i8)
+one_impl!(i16)
+one_impl!(i32)
+one_impl!(i64)
+one_impl!(int)
+one_impl!(f32)
+one_impl!(f64)
 
