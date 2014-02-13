@@ -9,6 +9,7 @@
 // except according to those terms.
 
 use option::{Option, Some};
+use ops::Add;
 
 macro_rules! one_impl(
     ($tyname:ty) => (
@@ -37,6 +38,13 @@ macro_rules! to_prim_impl(
     )
 )
 
+macro_rules! int_module(
+    ($tyname:ty) => (
+        one_impl!($tyname)
+        to_prim_impl!($tyname)
+    )
+)
+
 pub trait One {
     fn one() -> Self;
 }
@@ -46,29 +54,16 @@ pub trait ToPrimitive {
     fn to_int(&self) -> Option<int>;
 }
 
-one_impl!(u8)
-one_impl!(u16)
-one_impl!(u32)
-one_impl!(u64)
-one_impl!(uint)
-one_impl!(i8)
-one_impl!(i16)
-one_impl!(i32)
-one_impl!(i64)
-one_impl!(int)
-one_impl!(f32)
-one_impl!(f64)
-
-to_prim_impl!(u8)
-to_prim_impl!(u16)
-to_prim_impl!(u32)
-to_prim_impl!(u64)
-to_prim_impl!(uint)
-to_prim_impl!(i8)
-to_prim_impl!(i16)
-to_prim_impl!(i32)
-to_prim_impl!(i64)
-to_prim_impl!(int)
-to_prim_impl!(f32)
-to_prim_impl!(f64)
+int_module!(u8)
+int_module!(u16)
+int_module!(u32)
+int_module!(u64)
+int_module!(uint)
+int_module!(i8)
+int_module!(i16)
+int_module!(i32)
+int_module!(i64)
+int_module!(int)
+int_module!(f32)
+int_module!(f64)
 

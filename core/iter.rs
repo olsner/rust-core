@@ -73,10 +73,10 @@ pub trait DoubleEndedIterator<A>: Iterator<A> {
 
 #[deriving(Clone)]
 pub struct Range<T> {
-    priv low: T,
-    priv high: T,
-    priv state: T,
-    priv step: T
+    low: T,
+    high: T,
+    state: T,
+    step: T
 }
 
 #[deriving(Clone)]
@@ -85,6 +85,7 @@ pub struct Invert<T> {
 }
 
 impl<A: Add<A, A> + Ord + Clone + ToPrimitive> Iterator<A> for Range<A> {
+    #[inline]
     fn next(&mut self) -> Option<A> {
         if self.state < self.high {
             let val = self.state.clone();
@@ -95,6 +96,7 @@ impl<A: Add<A, A> + Ord + Clone + ToPrimitive> Iterator<A> for Range<A> {
         }
     }
 
+    #[inline]
     fn size_hint(&self) -> (uint, Option<uint>) {
         if self.high >= self.low {
             match self.low.to_uint() {
@@ -108,6 +110,7 @@ impl<A: Add<A, A> + Ord + Clone + ToPrimitive> Iterator<A> for Range<A> {
 }
 
 impl<A: Add<A, A> + Sub<A, A> + Ord + Clone + ToPrimitive> DoubleEndedIterator<A> for Range<A> {
+    #[inline]
     fn next_back(&mut self) -> Option<A> {
         if self.state >= self.low {
             let val = self.state.clone();
