@@ -9,7 +9,6 @@
 // except according to those terms.
 
 use option::{Option, Some};
-use ops::Add;
 
 macro_rules! one_impl(
     ($tyname:ty) => (
