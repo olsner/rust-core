@@ -17,14 +17,14 @@ use clone::Clone;
 use kinds::marker::NoSend;
 
 struct RcBox<T> {
-    value: T,
-    count: uint,
-    no_send: NoSend
+    pub value: T,
+    pub count: uint,
+    pub no_send: NoSend
 }
 
 #[unsafe_no_drop_flag]
 pub struct Rc<T> {
-    priv ptr: *mut RcBox<T>,
+    ptr: *mut RcBox<T>,
 }
 
 impl<T> Rc<T> {

@@ -73,15 +73,15 @@ pub trait DoubleEndedIterator<A>: Iterator<A> {
 
 #[deriving(Clone)]
 pub struct Range<T> {
-    priv low: T,
-    priv high: T,
-    priv state: T,
-    priv step: T
+    low: T,
+    high: T,
+    state: T,
+    step: T
 }
 
 #[deriving(Clone)]
 pub struct Invert<T> {
-    priv iter: T
+    iter: T
 }
 
 impl<A: Add<A, A> + Ord + Clone + ToPrimitive> Iterator<A> for Range<A> {

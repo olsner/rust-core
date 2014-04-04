@@ -153,15 +153,15 @@ impl<'a, A: HashBytes> HashBytes for &'a [A] {
 }
 
 pub struct State {
-    k0: u64,
-    k1: u64,
-    length: uint, // how many bytes we've processed
-    v0: u64,      // hash state
-    v1: u64,
-    v2: u64,
-    v3: u64,
-    tail: [u8, ..8], // unprocessed bytes
-    ntail: uint      // how many bytes in tail are valid
+    pub k0: u64,
+    pub k1: u64,
+    pub length: uint, // how many bytes we've processed
+    pub v0: u64,      // hash state
+    pub v1: u64,
+    pub v2: u64,
+    pub v3: u64,
+    pub tail: [u8, ..8], // unprocessed bytes
+    pub ntail: uint      // how many bytes in tail are valid
 }
 
 macro_rules! u8to64_le (
@@ -318,17 +318,17 @@ impl State {
 static INITIAL_CAPACITY: uint = 32u; // 2^5
 
 struct Bucket<K,V> {
-    hash: uint,
-    key: K,
-    value: V,
+    pub hash: uint,
+    pub key: K,
+    pub value: V,
 }
 
 pub struct HashMap<K,V> {
-    priv k0: u64,
-    priv k1: u64,
-    priv resize_at: uint,
-    priv size: uint,
-    priv buckets: Vec<Option<Bucket<K, V>>>
+    k0: u64,
+    k1: u64,
+    resize_at: uint,
+    size: uint,
+    buckets: Vec<Option<Bucket<K, V>>>
 }
 
 enum SearchResult {

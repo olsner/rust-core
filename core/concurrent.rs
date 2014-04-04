@@ -44,14 +44,14 @@ impl<T: Ord> GenericQueue<T> for PriorityQueue<T> {
 }
 
 struct QueueBox<T> {
-    queue: T,
-    mutex: Mutex,
-    not_empty: Cond,
-    no_freeze: NoFreeze
+    pub queue: T,
+    pub mutex: Mutex,
+    pub not_empty: Cond,
+    pub no_freeze: NoFreeze
 }
 
 struct QueuePtr<T> {
-    ptr: Arc<QueueBox<T>>
+    pub ptr: Arc<QueueBox<T>>
 }
 
 impl<A: Send, T: GenericQueue<A>> QueuePtr<T> {
@@ -117,7 +117,7 @@ impl<T> Clone for QueuePtr<T> {
 
 /// An unbounded, blocking concurrent queue
 pub struct Queue<T> {
-    priv ptr: QueuePtr<Deque<T>>
+    ptr: QueuePtr<Deque<T>>
 }
 
 impl<T: Send> Queue<T> {
@@ -157,7 +157,7 @@ impl<T> Clone for Queue<T> {
 
 /// An unbounded, blocking concurrent priority queue
 pub struct BlockingPriorityQueue<T> {
-    priv ptr: QueuePtr<PriorityQueue<T>>
+    ptr: QueuePtr<PriorityQueue<T>>
 }
 
 impl<T: Ord + Send> BlockingPriorityQueue<T> {
@@ -196,16 +196,16 @@ impl<T> Clone for BlockingPriorityQueue<T> {
 }
 
 struct BoundedQueueBox<T> {
-    deque: T,
-    mutex: Mutex,
-    not_empty: Cond,
-    not_full: Cond,
-    maximum: uint,
-    no_freeze: NoFreeze
+    pub deque: T,
+    pub mutex: Mutex,
+    pub not_empty: Cond,
+    pub not_full: Cond,
+    pub maximum: uint,
+    pub no_freeze: NoFreeze
 }
 
 struct BoundedQueuePtr<T> {
-    ptr: Arc<BoundedQueueBox<T>>
+    pub ptr: Arc<BoundedQueueBox<T>>
 }
 
 impl<A: Send, T: GenericQueue<A>> BoundedQueuePtr<T> {
@@ -318,7 +318,7 @@ impl<T> Clone for BoundedQueuePtr<T> {
 
 /// A bounded, blocking concurrent queue
 pub struct BoundedQueue<T> {
-    priv ptr: BoundedQueuePtr<Deque<T>>
+    ptr: BoundedQueuePtr<Deque<T>>
 }
 
 impl<T: Send> BoundedQueue<T> {
@@ -369,7 +369,7 @@ impl<T> Clone for BoundedQueue<T> {
 
 /// A bounded, blocking concurrent priority queue
 pub struct BoundedPriorityQueue<T> {
-    priv ptr: BoundedQueuePtr<PriorityQueue<T>>
+    ptr: BoundedQueuePtr<PriorityQueue<T>>
 }
 
 impl<T: Ord + Send> BoundedPriorityQueue<T> {
@@ -419,9 +419,9 @@ impl<T> Clone for BoundedPriorityQueue<T> {
 }
 
 struct LockedHashMap<K, V> {
-    map: HashMap<K, V>,
-    mutex: Mutex,
-    no_freeze: NoFreeze
+    pub map: HashMap<K, V>,
+    pub mutex: Mutex,
+    pub no_freeze: NoFreeze
 }
 
 impl<K: Hash + Eq, V> LockedHashMap<K, V> {
@@ -459,7 +459,7 @@ impl<K: Hash + Eq, V: Clone> LockedHashMap<K, V> {
 
 /// A concurrent hash table based a single lock per instance
 pub struct ConcurrentHashMap<K, V> {
-    priv ptr: Arc<LockedHashMap<K, V>>
+    ptr: Arc<LockedHashMap<K, V>>
 }
 
 impl<K: Hash + Eq + Send, V: Send> ConcurrentHashMap<K, V> {
@@ -510,10 +510,10 @@ impl<K, V> Clone for ConcurrentHashMap<K, V> {
 }
 
 struct ShardMapBox<K, V> {
-    maps: Vec<LockedHashMap<K, V>>,
-    k0: u64,
-    k1: u64,
-    no_freeze: NoFreeze
+    pub maps: Vec<LockedHashMap<K, V>>,
+    pub k0: u64,
+    pub k1: u64,
+    pub no_freeze: NoFreeze
 }
 
 impl<K: Hash + Eq, V> ShardMapBox<K, V> {
@@ -524,7 +524,7 @@ impl<K: Hash + Eq, V> ShardMapBox<K, V> {
 
 /// A concurrent hash table distributing keys across shards, with locking on a per-shard basis
 pub struct ShardMap<K, V> {
-    priv ptr: Arc<ShardMapBox<K, V>>
+    ptr: Arc<ShardMapBox<K, V>>
 }
 
 impl<K: Hash + Eq + Send, V: Send> ShardMap<K, V> {

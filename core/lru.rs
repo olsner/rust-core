@@ -40,21 +40,21 @@ use option::{Some, None, Option};
 use cmp::Eq;
 use ops::Drop;
 
-struct KeyRef<K> { k: *K }
+struct KeyRef<K> { pub k: *K }
 
 struct LruEntry<K, V> {
-    key: Option<K>,
-    value: Option<V>,
-    next: *mut LruEntry<K, V>,
-    prev: *mut LruEntry<K, V>,
+    pub key: Option<K>,
+    pub value: Option<V>,
+    pub next: *mut LruEntry<K, V>,
+    pub prev: *mut LruEntry<K, V>,
 }
 
 /// An LRU Cache.
 pub struct LruCache<K, V> {
-    priv map: HashMap<KeyRef<K>, ~LruEntry<K, V>>,
-    priv max_size: uint,
-    priv head: *mut LruEntry<K, V>,
-    priv tail: *mut LruEntry<K, V>,
+    map: HashMap<KeyRef<K>, ~LruEntry<K, V>>,
+    max_size: uint,
+    head: *mut LruEntry<K, V>,
+    tail: *mut LruEntry<K, V>,
 }
 
 impl<K: HashBytes> HashBytes for KeyRef<K> {
