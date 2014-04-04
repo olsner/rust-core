@@ -36,9 +36,9 @@ extern crate core;
 For freestanding use, simply omit the `libc` configuration switch.
 
 LLVM will emit calls to `memcpy`, `memmove` and `memset`. The `support.rs`
-module provides these functions, and must be compiled with `rustc --lib
---emit-llvm -passes inline` and then linked against the bytecode for the main
-module with `clang -flto -O2 main.bc support.bc`.
+module provides these functions, and must be compiled with `rustc
+--crate-type=lib --emit=bc -C passes=inline` and then linked against the
+bytecode for the main module with `clang -flto -O2 main.bc support.bc`.
 
 The `inline` pass *must* be run separately to due to
 [issue #10116](https://github.com/mozilla/rust/issues/10116) or LLVM will
