@@ -20,15 +20,15 @@ use option::{Option, Some, None};
 use kinds::marker::NoSend;
 
 struct RcBox<T> {
-    value: T,
-    strong: uint,
-    weak: uint,
-    no_send: NoSend
+    pub value: T,
+    pub strong: uint,
+    pub weak: uint,
+    pub no_send: NoSend
 }
 
 #[unsafe_no_drop_flag]
 pub struct Strong<T> {
-    priv ptr: *mut RcBox<T>
+    ptr: *mut RcBox<T>
 }
 
 impl<T> Strong<T> {
@@ -112,7 +112,7 @@ impl<T: Ord> Ord for Strong<T> {
 
 #[unsafe_no_drop_flag]
 pub struct Weak<T> {
-    priv ptr: *mut RcBox<T>
+    ptr: *mut RcBox<T>
 }
 
 impl<T> Weak<T> {

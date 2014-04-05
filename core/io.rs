@@ -47,11 +47,11 @@ extern {
 }
 
 pub struct Error {
-    code: c_int
+    pub code: c_int
 }
 
 pub struct StdStream {
-    priv file: *mut FILE
+    file: *mut FILE
 }
 
 pub fn stdin() -> StdStream {
@@ -89,7 +89,7 @@ impl StdStream {
 }
 
 pub struct File {
-    priv file: *mut FILE
+    file: *mut FILE
 }
 
 impl File {

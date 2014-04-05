@@ -19,12 +19,12 @@ type Disr = u64;
 
 #[lang="ty_desc"]
 struct TyDesc {
-    size: uint,
-    align: uint,
-    take_glue: extern "Rust" fn(*i8),
-    drop_glue: extern "Rust" fn(*i8),
-    visit_glue: extern "Rust" fn(*i8),
-    name: &'static str
+    pub size: uint,
+    pub align: uint,
+    pub take_glue: extern "Rust" fn(*i8),
+    pub drop_glue: extern "Rust" fn(*i8),
+    pub visit_glue: extern "Rust" fn(*i8),
+    pub name: &'static str
 }
 
 #[lang="ty_visitor"]
@@ -120,11 +120,11 @@ trait TyVisitor {
 }
 
 struct Box<T> {
-    ref_count: uint,
-    drop_glue: fn(ptr: *mut u8),
-    prev: *mut Box<T>,
-    next: *mut Box<T>,
-    data: T
+    pub ref_count: uint,
+    pub drop_glue: fn(ptr: *mut u8),
+    pub prev: *mut Box<T>,
+    pub next: *mut Box<T>,
+    pub data: T
 }
 
 fn get_box_size(body_size: uint, body_align: uint) -> uint {

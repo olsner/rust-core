@@ -41,6 +41,7 @@ pub mod kinds;
 pub mod lru;
 pub mod macros;
 pub mod mem;
+pub mod num;
 pub mod ops;
 pub mod option;
 #[cfg(libc)]

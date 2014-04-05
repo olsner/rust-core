@@ -17,13 +17,13 @@ use cmp::{Eq, Ord};
 use atomic::{atomic_fence_acq, atomic_xadd_relaxed, atomic_xsub_rel};
 
 struct ArcBox<T> {
-    value: T,
-    count: int
+    pub value: T,
+    pub count: int
 }
 
 #[unsafe_no_drop_flag]
 pub struct Arc<T> {
-    priv ptr: *mut ArcBox<T>
+    ptr: *mut ArcBox<T>
 }
 
 impl<T: Send + Freeze> Arc<T> {
@@ -103,13 +103,13 @@ impl<T: Ord> Ord for Arc<T> {
 }
 
 struct MutexArcBox<T> {
-    mutex: Mutex,
-    value: T,
-    no_freeze: marker::NoFreeze
+    pub mutex: Mutex,
+    pub value: T,
+    pub no_freeze: marker::NoFreeze
 }
 
 pub struct MutexArc<T> {
-    priv ptr: Arc<MutexArcBox<T>>
+    ptr: Arc<MutexArcBox<T>>
 }
 
 impl<T: Send> MutexArc<T> {
