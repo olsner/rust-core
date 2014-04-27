@@ -8,7 +8,11 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
+use clone::Clone;
+use cmp::Ord;
+use num::{One, ToPrimitive};
 use option::{Option, Some, None};
+use ops::{Add, Sub};
 
 pub trait Iterator<A> {
     fn next(&mut self) -> Option<A>;
@@ -29,6 +33,20 @@ pub trait Iterator<A> {
             }
         }
         accum
+    }
+
+    #[inline]
+    fn advance(&mut self, func: |A| -> bool) -> bool {
+        loop {
+            match self.next() {
+                Some(elem) => {
+                    if !func(elem) {
+                        return false;
+                    }
+                }
+                None => { return true; }
+            }
+        }
     }
 
     #[inline]
@@ -54,8 +72,54 @@ pub trait DoubleEndedIterator<A>: Iterator<A> {
 }
 
 #[deriving(Clone)]
+pub struct Range<T> {
+    low: T,
+    high: T,
+    state: T,
+    step: T
+}
+
+#[deriving(Clone)]
 pub struct Invert<T> {
     iter: T
+}
+
+impl<A: Add<A, A> + Ord + Clone + ToPrimitive> Iterator<A> for Range<A> {
+    #[inline]
+    fn next(&mut self) -> Option<A> {
+        if self.state < self.high {
+            let val = self.state.clone();
+            self.state = self.state + self.step;
+            Some(val)
+        } else {
+            None
+        }
+    }
+
+    #[inline]
+    fn size_hint(&self) -> (uint, Option<uint>) {
+        if self.high >= self.low {
+            match self.low.to_uint() {
+                Some(low) => (low, self.high.to_uint()),
+                None => (0, None)
+            }
+        } else {
+            (0, None)
+        }
+    }
+}
+
+impl<A: Add<A, A> + Sub<A, A> + Ord + Clone + ToPrimitive> DoubleEndedIterator<A> for Range<A> {
+    #[inline]
+    fn next_back(&mut self) -> Option<A> {
+        if self.state >= self.low {
+            let val = self.state.clone();
+            self.state = self.state - self.step;
+            Some(val)
+        } else {
+            None
+        }
+    }
 }
 
 impl<A, T: DoubleEndedIterator<A>> Iterator<A> for Invert<T> {
@@ -70,3 +134,34 @@ impl<A, T: DoubleEndedIterator<A>> DoubleEndedIterator<A> for Invert<T> {
     #[inline(always)]
     fn next_back(&mut self) -> Option<A> { self.iter.next() }
 }
+
+#[inline(always)]
+pub fn range<A: Add<A, A> + Ord + Clone + One>(start: A, stop: A) -> Range<A> {
+    range_step(start, stop, One::one())
+}
+
+#[inline(always)]
+pub fn range_inclusive<A: Add<A, A> + Ord + Clone + One>(start: A, stop: A) -> Range<A> {
+    range_step_inclusive(start, stop, One::one())
+}
+
+#[inline(always)]
+pub fn range_step<A: Add<A, A> + Ord + Clone>(start: A, stop: A, step: A) -> Range<A> {
+    Range {
+        low: start.clone(),
+        high: stop,
+        state: start,
+        step: step
+    }
+}
+
+#[inline(always)]
+pub fn range_step_inclusive<A: Add<A, A> + Ord + Clone + One>(start: A, stop: A, step: A) -> Range<A> {
+    Range {
+        low: start.clone(),
+        high: stop + One::one(),
+        state: start,
+        step: step
+    }
+}
+
