@@ -22,7 +22,7 @@ struct RcBox<T> {
     pub no_send: NoSend
 }
 
-#[unsafe_no_drop_flag]
+#[unsafe_no_drop_flag] #[allow(visible_private_types)]
 pub struct Rc<T> {
     ptr: *mut RcBox<T>,
 }

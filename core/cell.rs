@@ -57,6 +57,7 @@ impl<T: Copy> Clone for Cell<T> {
 }
 
 /// A mutable memory location with dynamically checked borrow rules
+#[allow(visible_private_types)]
 pub struct RefCell<T> {
     value: T,
     borrow: BorrowFlag,
