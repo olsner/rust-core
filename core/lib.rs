@@ -44,6 +44,7 @@ pub mod mem;
 pub mod num;
 pub mod ops;
 pub mod option;
+pub mod prelude;
 #[cfg(libc)]
 pub mod priority_queue;
 pub mod ptr;
