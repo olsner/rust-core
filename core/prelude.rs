@@ -70,7 +70,7 @@ pub use iter::{Iterator, DoubleEndedIterator};
 // pub use num::{Primitive, Int, Float, ToPrimitive, FromPrimitive};
 pub use num::ToPrimitive;
 //pub use path::{GenericPath, Path, PosixPath, WindowsPath};
-//pub use ptr::RawPtr;
+pub use ptr::RawPtr;
 #[cfg(libc)]
 pub use io::{Buffer, Writer, Reader, Seek};
 //pub use str::{Str, StrVector, StrSlice, OwnedStr, IntoMaybeOwned};

@@ -79,3 +79,32 @@ impl<T> Ord for *mut T {
     #[inline(always)]
     fn ge(&self, other: &*mut T) -> bool { *self >= *other }
 }
+
+pub fn null<T>() -> *T { 0 as *T }
+pub fn mut_null<T>() -> *mut T { 0 as *mut T }
+
+pub trait RawPtr<T> {
+	fn null() -> Self;
+	fn is_null(&self) -> bool;
+	fn is_not_null(&self) -> bool { !self.is_null() }
+
+	unsafe fn offset(self, count : int) -> Self;
+}
+
+impl<T> RawPtr<T> for *mut T {
+	fn null() -> *mut T { mut_null() }
+	fn is_null(&self) -> bool { *self == mut_null() }
+
+	unsafe fn offset(self, count : int) -> *mut T {
+		offset(self as *T, count) as *mut T
+	}
+}
+
+impl<T> RawPtr<T> for *T {
+	fn null() -> *T { null() }
+	fn is_null(&self) -> bool { *self == null() }
+
+	unsafe fn offset(self, count : int) -> *T {
+		offset(self as *T, count) as *T
+	}
+}
