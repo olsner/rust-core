@@ -150,28 +150,41 @@ impl<'a, T> Container for &'a [T] {
     }
 }
 
-pub fn iter<'a, T>(xs: &'a [T]) -> Items<'a, T> {
-    unsafe {
-        let p = to_ptr(xs);
-        if size_of::<T>() == 0 {
-            Items { ptr: p, end: (p as uint + xs.len()) as *T,
-                    lifetime: ContravariantLifetime::<'a> }
-        } else {
-            Items { ptr: p, end: offset(p, xs.len() as int),
-                    lifetime: ContravariantLifetime::<'a> }
+pub trait ImmutableVector<'a, T> {
+    fn iter(self) -> Items<'a, T>;
+}
+
+pub trait MutableVector<'a, T> {
+    fn mut_iter(self) -> MutItems<'a, T>;
+}
+
+impl<'a, T> ImmutableVector<'a, T> for &'a [T] {
+    fn iter(self) -> Items<'a, T> {
+        unsafe {
+            let p = to_ptr(self);
+            if size_of::<T>() == 0 {
+                Items { ptr: p, end: (p as uint + self.len()) as *T,
+                        lifetime: ContravariantLifetime::<'a> }
+            } else {
+                Items { ptr: p, end: offset(p, self.len() as int),
+                        lifetime: ContravariantLifetime::<'a> }
+            }
         }
     }
 }
 
-pub fn mut_iter<'a, T>(xs: &'a mut [T]) -> MutItems<'a, T> {
-    unsafe {
-        let p = to_mut_ptr(xs);
-        if size_of::<T>() == 0 {
-            MutItems { ptr: p, end: (p as uint + xs.len()) as *mut T,
-                       lifetime: ContravariantLifetime::<'a> }
-        } else {
-            MutItems { ptr: p, end: offset(p as *T, xs.len() as int) as *mut T,
-                       lifetime: ContravariantLifetime::<'a> }
+impl<'a, T> MutableVector<'a, T> for &'a mut [T] {
+    fn mut_iter(self) -> MutItems<'a, T> {
+        unsafe {
+            let p = to_mut_ptr(self);
+            if size_of::<T>() == 0 {
+                MutItems { ptr: p, end: (p as uint + self.len()) as *mut T,
+                           lifetime: ContravariantLifetime::<'a> }
+            } else {
+                MutItems { ptr: p,
+                           end: offset(p as *T, self.len() as int) as *mut T,
+                           lifetime: ContravariantLifetime::<'a> }
+            }
         }
     }
 }

@@ -38,52 +38,56 @@
 //! `drop`, `spawn`, and `channel`.
 
 // Reexported core operators
-pub use kinds::{Copy, Send, Sized, Share};
+pub use kinds::{Copy, Send, Sized, /*Share*/};
 pub use ops::{Add, Sub, Mul, Div, Rem, Neg, Not};
 pub use ops::{BitAnd, BitOr, BitXor};
 pub use ops::{Drop, Deref, DerefMut};
 pub use ops::{Shl, Shr, Index};
 pub use option::{Option, Some, None};
-pub use result::{Result, Ok, Err};
+//pub use result::{Result, Ok, Err};
 
 // Reexported functions
-pub use from_str::from_str;
+//pub use from_str::from_str;
 pub use iter::range;
 pub use mem::drop;
 
 // Reexported types and traits
 
-pub use ascii::{Ascii, AsciiCast, OwnedAsciiCast, AsciiStr, IntoBytes};
-pub use c_str::ToCStr;
+//pub use ascii::{Ascii, AsciiCast, OwnedAsciiCast, AsciiStr, IntoBytes};
+//pub use c_str::ToCStr;
 pub use char::Char;
 pub use clone::Clone;
-pub use cmp::{Eq, Ord, TotalEq, TotalOrd, Ordering, Less, Equal, Greater, Equiv};
-pub use container::{Container, Mutable, Map, MutableMap, Set, MutableSet};
-pub use iter::{FromIterator, Extendable};
-pub use iter::{Iterator, DoubleEndedIterator, RandomAccessIterator, CloneableIterator};
-pub use iter::{OrdIterator, MutableDoubleEndedIterator, ExactSize};
-pub use num::{Num, NumCast, CheckedAdd, CheckedSub, CheckedMul};
-pub use num::{Signed, Unsigned};
-pub use num::{Primitive, Int, Float, ToPrimitive, FromPrimitive};
-pub use path::{GenericPath, Path, PosixPath, WindowsPath};
-pub use ptr::RawPtr;
+pub use cmp::{Eq, Ord, Ordering, Less, Equal, Greater};
+// UNIMPL pub use cmp::{TotalEq, TotalOrd, Equiv};
+pub use container::Container;
+// UNIMPL pub use container::{Container, Mutable, Map, MutableMap, Set, MutableSet};
+// UNIMPL pub use iter::{FromIterator, Extendable};
+pub use iter::{Iterator, DoubleEndedIterator};
+// iter::{RandomAccessIterator, CloneableIterator};
+// pub use iter::{OrdIterator, MutableDoubleEndedIterator, ExactSize};
+// pub use num::{Num, NumCast, CheckedAdd, CheckedSub, CheckedMul};
+// pub use num::{Signed, Unsigned};
+// pub use num::{Primitive, Int, Float, ToPrimitive, FromPrimitive};
+pub use num::ToPrimitive;
+//pub use path::{GenericPath, Path, PosixPath, WindowsPath};
+//pub use ptr::RawPtr;
+#[cfg(libc)]
 pub use io::{Buffer, Writer, Reader, Seek};
-pub use str::{Str, StrVector, StrSlice, OwnedStr, IntoMaybeOwned};
-pub use to_str::{ToStr, IntoStr};
-pub use tuple::{Tuple1, Tuple2, Tuple3, Tuple4};
-pub use tuple::{Tuple5, Tuple6, Tuple7, Tuple8};
-pub use tuple::{Tuple9, Tuple10, Tuple11, Tuple12};
-pub use slice::{ImmutableEqVector, ImmutableTotalOrdVector, ImmutableCloneableVector};
-pub use slice::{OwnedVector};
-pub use slice::{MutableVector, MutableTotalOrdVector};
-pub use slice::{Vector, VectorVector, CloneableVector, ImmutableVector};
-pub use strbuf::StrBuf;
+//pub use str::{Str, StrVector, StrSlice, OwnedStr, IntoMaybeOwned};
+//pub use to_str::{ToStr, IntoStr};
+//pub use tuple::{Tuple1, Tuple2, Tuple3, Tuple4};
+//pub use tuple::{Tuple5, Tuple6, Tuple7, Tuple8};
+//pub use tuple::{Tuple9, Tuple10, Tuple11, Tuple12};
+//pub use slice::{ImmutableEqVector, ImmutableTotalOrdVector, ImmutableCloneableVector};
+//pub use slice::{OwnedVector};
+//pub use slice::{MutableVector, MutableTotalOrdVector};
+//pub use slice::{Vector, VectorVector, CloneableVector, ImmutableVector};
+pub use slice::{MutableVector, ImmutableVector};
+//pub use strbuf::StrBuf;
+#[cfg(libc)]
 pub use vec::Vec;
 
 // Reexported runtime types
-pub use comm::{sync_channel, channel, SyncSender, Sender, Receiver};
-pub use task::spawn;
-
-// Reexported statics
-#[cfg(not(test))]
-pub use gc::GC;
+// comm and task not provided by rust-core.
+//pub use comm::{sync_channel, channel, SyncSender, Sender, Receiver};
+//pub use task::spawn;

@@ -23,3 +23,9 @@ pub fn from_u32(i: u32) -> Option<char> {
         Some(unsafe { transmute(i) })
     }
 }
+
+pub trait Char {
+}
+
+impl Char for char {
+}
