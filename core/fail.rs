@@ -12,14 +12,18 @@ use c_types::c_int;
 
 mod detail {
     extern {
-        pub fn abort() -> !;
+        pub fn abort(msg: &str) -> !;
         pub fn breakpoint();
     }
 }
 
-#[inline(always)]
+#[inline(never)]
 pub fn abort() -> ! {
-    unsafe { detail::abort() }
+    abort2("aborted. no message.");
+}
+
+pub fn abort2(msg: &str) -> ! {
+    unsafe { detail::abort(msg); }
 }
 
 pub fn breakpoint() {
@@ -28,26 +32,26 @@ pub fn breakpoint() {
 
 #[inline]
 #[lang="fail_bounds_check"]
-pub fn fail_bounds_check(_: *u8, _: uint, _: uint, _: uint) -> ! {
-    abort()
+pub fn fail_bounds_check(_file: *u8, _line: uint, _index: uint, _len: uint) -> ! {
+    abort2("fail_bounds_check");
 }
 
 #[inline]
 #[lang="fail_"]
-pub fn fail_(_: *u8, _: *u8, _: uint) -> ! {
-    abort()
+pub fn fail_(_expr: *u8, _file: *u8, _line: uint) -> ! {
+    abort2("fail_");
 }
 
 #[inline]
 pub fn out_of_memory() -> ! {
-    abort()
+    abort2("out of memory")
 }
 
 #[cfg(debug)]
 #[inline(always)]
 pub fn assert(b: bool) {
     if !b {
-        abort()
+        abort("assert failed")
     }
 }
 
