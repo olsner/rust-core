@@ -36,7 +36,7 @@ impl<T> Option<T> {
     }
 
     /// Return the value in an `Option` or call `abort` if it is `None`.
-    pub fn get(self) -> T {
+    pub fn unwrap(self) -> T {
         match self { Some(x) => x, None => abort() }
     }
 
